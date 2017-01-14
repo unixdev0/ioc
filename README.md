@@ -5,7 +5,7 @@
 This header file only implementation will allow you build application written in C++
 to build application using the design pattern **IoC** a.k.a. *Inversion Of Control*
 
-** This project is _work in progress_ ** 
+**This project is _work in progress_** 
 
 I am adding functionality to support on-the-fly creation and injection of C++ objects
 into your application.
