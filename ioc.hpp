@@ -19,7 +19,7 @@ namespace org {
 						virtual ~UntypedPlaceholder() { /* NC */ }
 					};
 					
-					///Typed placeholder to store creation and instance of typed instances
+					/// Typed placeholder to store creation and instance of typed instances
 					template <typename T>
 					class Placeholder : public UntypedPlaceholder {
 					public:
@@ -27,6 +27,12 @@ namespace org {
 						virtual void __RTTI__() { /* Matches its parent's purpose */ }
 						virtual ~Placeholder() { /* NC */ }
 					};
+				private:
+					/// Collection that stores on-the-fly instance creation logic
+					std::map<std::string, std::function<void*()>> _creators;
+					/// Collection that stores the actual instances pre-created by 
+					/// the callee (pluggable components) of the framework and stored inside the framework
+					std::map<std::string, std::shared_ptr<GenericFolder>> _instances;				
 				};
 			}
 		}
