@@ -54,6 +54,35 @@ namespace org {
                             _creators.erase(creators_iter);
                         }
                     }
+                public:
+                    virtual ~Ioc() { /* NOP */ }
+
+                    /// Register a typed class creation lambda that
+                    /// will drive instantiation logic of the typed class
+                    /// Note: Variadic template Ts is the sequence of this type's typed dependencies
+                    template<class Tc, typename... Ts>
+                    void registerClass() {
+                        /// register the creation lambda
+                        auto createType = [this](void) -> Tc * {
+                            return new Tc ( this->getInstance<Ts>()... );
+                        };
+                        ///associate this lambda with a type and store in the creator map
+                        _creators[ typeid(T).name() ] = createType;
+                    }
+
+                    /// Removes the association between the type and the lambda instantiation logic
+                    template <typename Tc>
+                    void deregesterClass() {
+                        /// Check if we have any instances of this type registered
+                        if (_instances.find( typeid(Tc).name() ) != _instances.end()) {
+                            remove_from_instances <Tc> ();
+                        }
+                        /// Then check if any instantiation logic for this type is present
+                        if (_creators.find( typeid(Tc).name() ) != _creators.end()) {
+                            remove_from_creators <Tc> ();
+                        }
+                    }
+
 				};
 			}
 		}
